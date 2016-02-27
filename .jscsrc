@@ -42,6 +42,7 @@
     "requireSpacesInConditionalExpression": true,
     "requireSpaceBeforeBlockStatements": true,
     "requireSpacesInForStatement": true,
+    "requireTrailingComma": false,
     "requireLineFeedAtFileEnd": true,
     "requireSpacesInFunctionExpression": {
         "beforeOpeningCurlyBrace": true
