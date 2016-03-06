@@ -17,8 +17,6 @@ let mainWindow;
 
 let tray;
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
 app.on("ready", () => {
     showTray();
     createWindow();
@@ -35,10 +33,9 @@ app.on("activate", function() {
 ipc.on("quit", app.quit);
 
 function createWindow() {
-    // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 1200,
-        height: 800,
+        width: 600,
+        height: 400,
         titleBarStyle: "hidden",
         frame: false,
         resizable: false
@@ -46,9 +43,6 @@ function createWindow() {
 
     mainWindow.loadURL("file://" + __dirname + "/index.html");
 
-    // mainWindow.webContents.openDevTools();
-
-    // Emitted when the window is closed.
     mainWindow.on("closed", function() {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
@@ -56,6 +50,7 @@ function createWindow() {
         mainWindow = null;
     });
 
+    // Let the app determine and broadcast its state to the UI
     mainWindow.webContents.on("did-finish-load",
         () => signoff.updateState(mainWindow.webContents));
 }
@@ -72,7 +67,7 @@ function showTray() {
     menu.append(new MenuItem({
         type: "separator"
     }));
-    
+
     menu.append(new MenuItem({
         label: "Quit",
         click: app.quit,
