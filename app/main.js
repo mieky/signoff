@@ -21,13 +21,15 @@ let tray;
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 600, height: 400 });
+    mainWindow = new BrowserWindow({
+        width: 600,
+        height: 400,
+        titleBarStyle: "hidden",
+        frame: false
+    });
 
     // and load the index.html of the app.
     mainWindow.loadURL("file://" + __dirname + "/index.html");
-
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools();
 
     // Emitted when the window is closed.
     mainWindow.on("closed", function() {
@@ -48,7 +50,8 @@ function showTray() {
     ]);
     menu.append(new MenuItem({
         label: "Quit",
-        click: app.quit
+        click: app.quit,
+        accelerator: "Command+Q"
     }));
 
     tray.setToolTip("Signoff");
@@ -58,8 +61,8 @@ function showTray() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on("ready", () => {
-    createWindow();
     showTray();
+    createWindow();
 });
 
 // Quit when all windows are closed.
