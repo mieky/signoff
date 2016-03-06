@@ -1,6 +1,8 @@
 "use strict";
 
 const electron = require("electron");
+const path     = require("path");
+const MenuItem = require("menu-item");
 
 // Module to control application life.
 const app = electron.app;
@@ -15,11 +17,11 @@ const BrowserWindow = electron.BrowserWindow;
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-let appIcon;
+let tray;
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 800, height: 600 });
+    mainWindow = new BrowserWindow({ width: 600, height: 400 });
 
     // and load the index.html of the app.
     mainWindow.loadURL("file://" + __dirname + "/index.html");
@@ -37,22 +39,28 @@ function createWindow() {
 }
 
 function showTray() {
-    appIcon = new Tray(null);
-    var contextMenu = Menu.buildFromTemplate([
-      { label: 'Item1', type: 'radio' },
-      { label: 'Item2', type: 'radio' },
-      { label: 'Item3', type: 'radio', checked: true },
-      { label: 'Item4', type: 'radio' }
+    tray = new Tray(path.resolve(__dirname, "../media/menubar-icon.png"));
+    tray.setPressedImage(path.resolve(__dirname, "../media/menubar-icon.png"));
+
+    let menu = Menu.buildFromTemplate([
+        { label: "Resume", type: "radio" },
+        { label: "Sign off", type: "radio" }
     ]);
-    appIcon.setToolTip('This is my application.');
-    appIcon.setContextMenu(contextMenu);
+    menu.append(new MenuItem({
+        label: "Quit",
+        click: app.quit
+    }));
+
+    tray.setToolTip("Signoff");
+    tray.setContextMenu(menu);
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
-app.on("ready", createWindow);
-
-app.on("ready", showTray);
+app.on("ready", () => {
+    createWindow();
+    showTray();
+});
 
 // Quit when all windows are closed.
 app.on("window-all-closed", function() {
