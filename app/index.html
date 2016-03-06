@@ -6,12 +6,24 @@
         <style>
             body {
                 font-family: -apple-system, "Helvetica Neue", "Lucida Grande";
+                padding: 40px;
+            }
+
+            .title {
+                font-size: 50px;
+            }
+
+            .message {
+                font-size: 24px;
             }
         </style>
     </head>
     <body>
-        node <script>document.write(process.versions.node)</script>,
-        Chrome <script>document.write(process.versions.chrome)</script>,
-        Electron <script>document.write(process.versions.electron)</script>
+        <h1 class="title"></h1>
+        <div class="message">lölz</div>
+
+        <button id="b">moi</button>
+
+        <script src="browser.js"></script>
     </body>
 </html>

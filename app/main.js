@@ -6,6 +6,8 @@ const MenuItem = require("menu-item");
 
 // Module to control application life.
 const app = electron.app;
+// const ipc = electron.ipcMain;
+const ipc = require("ipc");
 
 const Tray = electron.Tray;
 const Menu = electron.Menu;
@@ -22,14 +24,17 @@ let tray;
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 600,
-        height: 400,
+        width: 1200,
+        height: 800,
         titleBarStyle: "hidden",
-        frame: false
+        frame: false,
+        resizable: false
     });
 
     // and load the index.html of the app.
     mainWindow.loadURL("file://" + __dirname + "/index.html");
+
+    mainWindow.webContents.openDevTools();
 
     // Emitted when the window is closed.
     mainWindow.on("closed", function() {
@@ -37,6 +42,10 @@ function createWindow() {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         mainWindow = null;
+    });
+
+    mainWindow.webContents.on("did-finish-load", () => {
+        mainWindow.webContents.send("welcome-message", "huzzah");
     });
 }
 
@@ -81,3 +90,5 @@ app.on("activate", function() {
         createWindow();
     }
 });
+
+ipc.on("quit", app.quit);
